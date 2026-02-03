@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+pypdf
+tiktoken
+faiss-cpu
+numpy
+openai
+reportlab
+streamlit
+requests
+python-dotenv
+python-docx
+openpyxl
+python-multipart

@@ -1,0 +1,11 @@
+# Root requirements – used by Streamlit Community Cloud
+streamlit
+pypdf
+tiktoken
+faiss-cpu
+numpy
+openai
+python-dotenv
+python-docx
+openpyxl
+reportlab
