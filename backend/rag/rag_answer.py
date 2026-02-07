@@ -6,13 +6,11 @@ import numpy as np
 import faiss
 from openai import OpenAI
 from dotenv import load_dotenv
-from .embed_store import EMBED_MODEL, OPENAI_API_KEY
+from .embed_store import EMBED_MODEL
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get configuration from environment
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 CHAT_MODEL = os.getenv("CHAT_MODEL", "llama-3.3-70b-versatile")
 
@@ -28,10 +26,11 @@ def embed_query(query: str) -> np.ndarray:
     Returns:
         Normalized embedding vector
     """
-    if not OPENAI_API_KEY:
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
         raise ValueError("OPENAI_API_KEY environment variable is required for embeddings")
 
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI(api_key=openai_api_key)
 
     response = client.embeddings.create(
         model=EMBED_MODEL,
@@ -80,12 +79,13 @@ def generate_answer(query: str, context_chunks: list[str]) -> str:
     Returns:
         Generated answer
     """
-    if not GROQ_API_KEY:
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    if not groq_api_key:
         raise ValueError("GROQ_API_KEY environment variable is required for chat completions")
 
     # Groq is OpenAI-SDK-compatible — just swap base URL + key
     client = OpenAI(
-        api_key=GROQ_API_KEY,
+        api_key=groq_api_key,
         base_url=GROQ_BASE_URL
     )
 

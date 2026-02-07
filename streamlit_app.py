@@ -15,11 +15,15 @@ try:
         if _k in st.secrets and _k not in os.environ:
             os.environ[_k] = st.secrets[_k]
 except Exception:
-    pass  # No secrets file – local .env will be used by rag modules
+    pass  # No secrets file – local .env will be used below
 
 # ── 2. Make backend/rag importable ─────────────────────────────────────────
 _BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(_BASE, "backend"))
+
+# Load backend/.env explicitly so that rag modules pick up the keys at import time
+from dotenv import load_dotenv                                   # noqa: E402
+load_dotenv(os.path.join(_BASE, "backend", ".env"))
 
 from rag.pdf_to_text import extract_text, SUPPORTED_EXTENSIONS  # noqa: E402
 from rag.chunking import chunk_text                              # noqa: E402

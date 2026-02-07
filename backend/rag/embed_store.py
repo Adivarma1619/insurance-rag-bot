@@ -11,11 +11,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Get configuration from environment
-# Note: Grok doesn't currently support embeddings, so we'll use OpenAI for embeddings
-# and Grok for chat completions
 EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 def embed_texts(texts: list[str]) -> np.ndarray:
@@ -29,10 +25,11 @@ def embed_texts(texts: list[str]) -> np.ndarray:
     Returns:
         Normalized numpy array of shape (len(texts), embedding_dim)
     """
-    if not OPENAI_API_KEY:
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
         raise ValueError("OPENAI_API_KEY environment variable is required for embeddings")
 
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI(api_key=openai_api_key)
 
     # Get embeddings from OpenAI
     response = client.embeddings.create(
